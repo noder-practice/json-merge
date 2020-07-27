@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 
-const exists = filePath = fs.existsSync(filePath)
+const exists = filePath => fs.existsSync(filePath)
 const jsonPath = process.argv[2]
 
 if (!jsonPath) {
@@ -13,13 +13,13 @@ if (!jsonPath) {
 const rootPath = path.join(process.cwd(), jsonPath)
 
 // 遍历所有文件
-const walk = (path) => fs.readFileSync(path).reduce((files, file) => {
+const walk = (path) => fs.readdirSync(path).reduce((files, file) => {
   const filePath = `${path}/${file}`
-  const stat = fs.statSync(filePath) /Path/ 获取文件状态
+  const stat = fs.statSync(filePath) // 获取文件状态
 
   if (stat.isFile()) {
     if (/.*\.json$/.test(filePath)) {
-      return files.concat(file)
+      return files.concat(filePath)
     }
   }
 
@@ -47,6 +47,8 @@ const mergeFileData = () => {
         console.log('读取出错', file);
         console.log(error);
       }
+
+      console.log(fileJson);
 
       total[basename] = fileJson
 
